@@ -1,0 +1,45 @@
+Настрой агент пользователя и запусти обход
+<button style="width: 1000; height: 40px" onclick="start()">
+  Запустить обход
+</button>
+
+<iframe
+  src="https://webitem.ru/"
+  id="iframe"
+  width="1000"
+  height="700"
+></iframe>
+
+<script>
+  async function start() {
+    /* let iframeWindow = iframe.contentWindow; 
+    setTimeout(() => {
+      iframe.contentWindow.location = "https://webitem.ru/items/all"; // OK
+    }, 2000); */
+
+    /*     const xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+      if (xhr.status == 200) {
+        const xml = xhr.responseXML;
+        console.log(xml);
+      }
+    };
+
+    xhr.open("GET", "https://webitem.ru/static/sitemap.xml"); // GET-запрос к /data
+    xhr.responseType = "document"; // устанавливаем тип ответа
+    xhr.setRequestHeader("Accept", "text/xml"); // принимаем только xml
+    xhr.send(); // выполняем запрос */
+
+    /* let response = await fetch("https://webitem.ru/static/sitemap.xml", {
+      mode: "no-cors",
+    }); */
+
+    let response = await fetch("https://webitem.ru/static/sitemap.xml", {
+      mode: "no-cors",
+    });
+
+    let text = await response.text(); // прочитать тело ответа как текст
+
+    console.log(text + "...");
+  }
+</script>
