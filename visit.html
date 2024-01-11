@@ -17,7 +17,7 @@
       iframe.contentWindow.location = "https://webitem.ru/items/all"; // OK
     }, 2000); */
 
-    /*     const xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.onload = () => {
       if (xhr.status == 200) {
         const xml = xhr.responseXML;
@@ -30,16 +30,10 @@
     xhr.setRequestHeader("Accept", "text/xml"); // принимаем только xml
     xhr.send(); // выполняем запрос */
 
-    /* let response = await fetch("https://webitem.ru/static/sitemap.xml", {
-      mode: "no-cors",
-    }); */
-
-    let response = await fetch("https://webitem.ru/static/sitemap.xml", {
-      mode: "no-cors",
-    });
+    /*   let response = await fetch("https://webitem.ru/static/sitemap.xml");
 
     let text = await response.text(); // прочитать тело ответа как текст
 
-    console.log(text + "...");
+    console.log(text + "..."); */
   }
 </script>
