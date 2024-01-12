@@ -5,7 +5,7 @@
   height="700"
 ></iframe>
 
-<button style="width: 1000; height: 40px" onclick="start()">
+<button style="width: 1000; height: 40px" onclick="onClick()" id="button">
   Запустить обход
 </button>
 
@@ -15,6 +15,7 @@
   const xhr = new XMLHttpRequest();
   let nodePaths;
   const state = document.getElementById("state");
+  const button = document.getElementById("button");
   let totalPages = 0;
 
   // Загрузка sitemap
@@ -32,19 +33,31 @@
   xhr.send(); // выполняем запрос */
 
   // Запуск обхода
-  async function start() {
-    changePage(0);
+  let currPage = 40;
+  let isProcess = false;
+  let timeout;
+  async function onClick() {
+    if (!isProcess) {
+      button.textContent = `Приостановить обход`;
+      isProcess = true;
+      changePage(currPage);
+    } else {
+      isProcess = false;
+      button.textContent = `Восстановить обход`;
+      clearInterval(timeout);
+    }
     function changePage(page) {
+      currPage = page;
       state.textContent = `Запущен обход. Обработано ${page} из ${totalPages}.`;
       iframe.contentWindow.location = nodePaths[page].textContent;
       console.log(nodePaths[page].textContent);
       page++;
-      if (page < totalPages) {
-        setTimeout(() => {
+      if (page < totalPages && isProcess) {
+        timeout = setTimeout(() => {
           changePage(page);
         }, 30000);
       } else {
-        state.textContent = `Обход завершен, обработано страниц: ${totalPages}.`;
+        state.textContent = `Обход остановлен, обработано страниц: ${page} из ${totalPages}.`;
       }
     }
   }
