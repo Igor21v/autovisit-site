@@ -9,18 +9,21 @@
   Запустить обход
 </button>
 
+<div id="state">Загрузка sitemap...</div>
+
 <script>
   const xhr = new XMLHttpRequest();
+  let nodePaths;
+  const state = document.getElementById("state");
+  let totalPages = 0;
+
+  // Загрузка sitemap
   xhr.onload = () => {
     if (xhr.status == 200) {
       const xml = xhr.responseXML;
-      const pathsNodes = xml.querySelectorAll("loc");
-      pathsNodes.forEach((path, index) => {});
-      console.log(pathsNodes.length);
-      document.body.append(
-        `Sitemap загружен, всего записей ${pathsNodes.length}. 
-        Настрой агент пользователя и запусти обход`
-      );
+      nodePaths = xml.querySelectorAll("loc");
+      totalPages = nodePaths.length;
+      state.textContent = `Sitemap загружен, всего записей: ${totalPages}. Настройте агент пользователя и запустите обход`;
     }
   };
   xhr.open("GET", "https://webitem.ru/static/sitemap.xml"); // GET-запрос к /data
@@ -28,10 +31,21 @@
   xhr.setRequestHeader("Accept", "text/xml"); // принимаем только xml
   xhr.send(); // выполняем запрос */
 
+  // Запуск обхода
   async function start() {
-    /* let iframeWindow = iframe.contentWindow; 
-    setTimeout(() => {
-      iframe.contentWindow.location = "https://webitem.ru/items/all"; // OK
-    }, 2000); */
+    changePage(0);
+    function changePage(page) {
+      state.textContent = `Запущен обход. Обработано ${page} из ${totalPages}.`;
+      iframe.contentWindow.location = nodePaths[page].textContent;
+      console.log(nodePaths[page].textContent);
+      page++;
+      if (page < totalPages) {
+        setTimeout(() => {
+          changePage(page);
+        }, 30000);
+      } else {
+        state.textContent = `Обход завершен, обработано страниц: ${totalPages}.`;
+      }
+    }
   }
 </script>
