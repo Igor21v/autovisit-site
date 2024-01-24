@@ -1,21 +1,25 @@
-<iframe
-  src="https://webitem.ru/static/auto-visit/autovisit.jpg"
-  id="iframe"
-  width="1000"
-  height="700"
-></iframe>
+<link rel="stylesheet" href="visit.css" />
 
-<button style="width: 1000; height: 40px" onclick="onClick()" id="button">
-  Запустить обход
-</button>
-
-<div id="state">Загрузка sitemap...</div>
+<div class="wrapper">
+  <iframe
+    src="https://webitem.ru/static/auto-visit/autovisit.jpg"
+    id="iframe"
+    width="1000"
+    height="700"
+  ></iframe>
+  <!--  <div class="sitemap">
+    <p class="sitemap__text">Введите адрес вашего sitemap.xml &nbsp;</p>
+    <input type="text" value="https://webitem.ru/static/sitemap.xml" />
+  </div> -->
+  <button onclick="onClick()" id="startButton">Запустить обход</button>
+  <div id="state">Загрузка sitemap...</div>
+</div>
 
 <script>
   const xhr = new XMLHttpRequest();
   let nodePaths;
   const state = document.getElementById("state");
-  const button = document.getElementById("button");
+  const button = document.getElementById("startButton");
   let totalPages = 0;
 
   // Загрузка sitemap

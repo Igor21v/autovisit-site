@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+}
+
+#startButton {
+  height: 40px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 1000px;
+  padding: 4px;
+  justify-content: center;
+}
+
+.sitemap {
+  display: flex;
+  height: 40px;
+}
+
+.sitemap__text {
+  flex-shrink: 0;
+  text-align: center;
+  justify-content: center;
+  line-height: 40px;
+}
+
+input {
+  width: 100%;
+}
