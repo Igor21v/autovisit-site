@@ -7,12 +7,19 @@
     width="1000"
     height="700"
   ></iframe>
-  <!--  <div class="sitemap">
+  <div class="sitemap">
     <p class="sitemap__text">Введите адрес вашего sitemap.xml &nbsp;</p>
     <input type="text" value="https://webitem.ru/static/sitemap.xml" />
-  </div> -->
-  <button onclick="onClick()" id="startButton">Запустить обход</button>
-  <div id="state">Загрузка sitemap...</div>
+    <button onclick="" id="download">Загрузить sitemap</button>
+  </div>
+  <div id="state">Загрузите sitemap</div>
+  <div class="select-page">
+    <p class="select-page__text">Страница начала обхода &nbsp;</p>
+    <input type="number" value="0" class="select-page__input" />
+  </div>
+  <button onclick="onClick()" id="startButton" class="select-page__button">
+    Запустить обход
+  </button>
 </div>
 
 <script>
@@ -28,7 +35,7 @@
       const xml = xhr.responseXML;
       nodePaths = xml.querySelectorAll("loc");
       totalPages = nodePaths.length;
-      state.textContent = `Sitemap загружен, всего записей: ${totalPages}. Настройте агент пользователя и запустите обход`;
+      state.textContent = `Sitemap загружен, всего записей: ${totalPages}. Не забудьте настроить агент пользователя и запустите обход`;
     }
   };
   xhr.open("GET", "https://webitem.ru/static/sitemap.xml"); // GET-запрос к /data
