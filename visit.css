@@ -26,14 +26,19 @@ input {
   width: 100%;
 }
 
-.select-page__text {
-  display: inline;
+.settings {
+  display: none;
+}
+.settings-visible {
+  display: flex;
+  gap: 4px;
 }
 
-.select-page__input {
-  width: fit-content;
+.startButton {
+  display: none;
 }
 
-#startButton {
+.startButton-visible {
   height: 40px;
+  display: initial;
 }

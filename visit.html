@@ -9,66 +9,96 @@
   ></iframe>
   <div class="sitemap">
     <p class="sitemap__text">Введите адрес вашего sitemap.xml &nbsp;</p>
-    <input type="text" value="https://webitem.ru/static/sitemap.xml" />
-    <button onclick="" id="download">Загрузить sitemap</button>
+    <input type="url" class="sitemap__input" />
+    <button onclick="download()" id="download">Загрузить sitemap</button>
   </div>
   <div id="state">Загрузите sitemap</div>
-  <div class="select-page">
-    <p class="select-page__text">Страница начала обхода &nbsp;</p>
-    <input type="number" value="0" class="select-page__input" />
+  <div class="settings" id="settings">
+    <div class="settings__page">
+      <p class="settings__page__text">Страница начала обхода &nbsp;</p>
+      <input type="number" value="1" class="settings__page__input" />
+    </div>
+    <div class="settings__time">
+      <p class="settings__time__text">Время загрузки страницы, сек &nbsp;</p>
+      <input type="number" value="30" class="settings__time__input" />
+    </div>
   </div>
-  <button onclick="onClick()" id="startButton" class="select-page__button">
+  <button onclick="start()" id="startButton" class="startButton">
     Запустить обход
   </button>
 </div>
 
 <script>
-  const xhr = new XMLHttpRequest();
+  //
+  // Инициализация
+  //
   let nodePaths;
   const state = document.getElementById("state");
-  const button = document.getElementById("startButton");
   let totalPages = 0;
+  const sitemapInput = document.querySelector(".sitemap__input");
+  const startButton = document.getElementById("startButton");
+  const settings = document.getElementById("settings");
+  sitemapInput.value = localStorage.getItem("sitemap");
 
+  //
   // Загрузка sitemap
-  xhr.onload = () => {
-    if (xhr.status == 200) {
-      const xml = xhr.responseXML;
-      nodePaths = xml.querySelectorAll("loc");
-      totalPages = nodePaths.length;
-      state.textContent = `Sitemap загружен, всего записей: ${totalPages}. Не забудьте настроить агент пользователя и запустите обход`;
-    }
-  };
-  xhr.open("GET", "https://webitem.ru/static/sitemap.xml"); // GET-запрос к /data
-  xhr.responseType = "document"; // устанавливаем тип ответа
-  xhr.setRequestHeader("Accept", "text/xml"); // принимаем только xml
-  xhr.send(); // выполняем запрос */
+  //
+  function download() {
+    localStorage.setItem("sitemap", sitemapInput.value);
+    const xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+      if (xhr.status == 200) {
+        const xml = xhr.responseXML;
+        nodePaths = xml.querySelectorAll("loc");
+        totalPages = nodePaths.length;
+        state.textContent = `Sitemap загружен, всего записей: ${totalPages}. Не забудьте настроить агент пользователя и запустите обход`;
+        startButton.className = "startButton-visible";
+        settings.className = "settings-visible";
+      }
+    };
+    xhr.open("GET", sitemapInput.value);
+    xhr.responseType = "document";
+    xhr.setRequestHeader("Accept", "text/xml");
+    xhr.send();
+    xhr.onerror = (error) => {
+      state.textContent = "Ошибка загрузки, нет соединения или невалидный URL";
+    };
+  }
 
+  //
   // Запуск обхода
-  let currPage = 0;
+  //
+  const pageInput = document.querySelector(".settings__page__input");
+  const timeInput = document.querySelector(".settings__time__input");
+
   let isProcess = false;
   let timeout;
-  async function onClick() {
+  async function start() {
     if (!isProcess) {
-      button.textContent = `Приостановить обход`;
+      startButton.textContent = `Приостановить обход`;
       isProcess = true;
-      changePage(currPage);
+      changePage(pageInput.value);
     } else {
       isProcess = false;
-      button.textContent = `Восстановить обход`;
+      startButton.textContent = `Восстановить обход`;
       clearInterval(timeout);
     }
     function changePage(page) {
-      currPage = page;
+      pageInput.value = page;
       state.textContent = `Запущен обход. Обработано ${page} из ${totalPages}.`;
-      iframe.contentWindow.location = nodePaths[page].textContent;
-      console.log(nodePaths[page].textContent);
+      iframe.contentWindow.location = nodePaths[page - 1].textContent;
+      console.log(nodePaths[page - 1].textContent);
       page++;
-      if (page < totalPages && isProcess) {
+      if (page <= totalPages && isProcess) {
         timeout = setTimeout(() => {
           changePage(page);
-        }, 30000);
+        }, timeInput.value * 1000);
       } else {
-        state.textContent = `Обход остановлен, обработано страниц: ${page} из ${totalPages}.`;
+        startButton.textContent = `Запустить обход заново`;
+        pageInput.value = 1;
+        state.textContent = `Обход остановлен, обработано страниц: ${
+          page - 1
+        } из ${totalPages}.`;
       }
     }
   }
