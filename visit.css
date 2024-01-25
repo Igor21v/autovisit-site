@@ -2,14 +2,10 @@
   margin: 0;
 }
 
-#startButton {
-  height: 40px;
-}
-
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
   width: 1000px;
   padding: 4px;
   justify-content: center;
@@ -18,15 +14,31 @@
 .sitemap {
   display: flex;
   height: 40px;
+  gap: 4px;
 }
 
 .sitemap__text {
   flex-shrink: 0;
-  text-align: center;
-  justify-content: center;
   line-height: 40px;
 }
 
 input {
   width: 100%;
+}
+
+.settings {
+  display: none;
+}
+.settings-visible {
+  display: flex;
+  gap: 4px;
+}
+
+.startButton {
+  display: none;
+}
+
+.startButton-visible {
+  height: 40px;
+  display: initial;
 }
